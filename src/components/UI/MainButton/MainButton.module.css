@@ -1,0 +1,20 @@
+.btn {
+    height: 45px;
+    width: 120px;
+    background: #EA5959;
+    color: #F3F3F3;
+    font-family: "Nunito", sans-serif;
+    font-size: 14px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: #ce3b3b;
+}
+
+.btn:active {
+    border: 1px solid black;
+    background: #EA5959;
+}
