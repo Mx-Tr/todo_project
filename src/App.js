@@ -1,81 +1,65 @@
-import React, {useState} from "react";
-import './styles/App.css'
-import Categories from "./components/Categories/Categories";
-import Tasks from "./components/Tasks/Tasks";
-import MyModal from "./components/UI/MyModal/MyModal";
+import React, { useEffect, useState } from 'react';
+import './styles/App.css';
+import Categories from './components/Categories/Categories';
+import Tasks from './components/Tasks/Tasks';
 
 
 function App() {
 
-	const [tasks, setTasks] = useState([
-		{id: 0, taskTitle: 'smth', categoryName: "Main", checkedStatus: false},
-		{id: 1, taskTitle: 'smth2', categoryName: "Test2", checkedStatus: false},
-		{id: 2, taskTitle: 'smth3', categoryName: "Test3", checkedStatus: false},
-	])
+  const loadTasksFromLocalStorage = () => {
+    const storedTasks = localStorage.getItem('tasks');
+    return storedTasks ? JSON.parse(storedTasks) : [
+      { id: 0, taskTitle: 'Initial task', categoryName: 'Main', checkedStatus: false },
+    ];
+  };
 
-	const [categories, setCategories] = useState([
-		...new Set(tasks.map((task) => task.categoryName))
-	]);
+  const loadCategoriesFromLocalStorage = () => {
+    const storedCategories = localStorage.getItem('categories');
+    return storedCategories ? JSON.parse(storedCategories) : ['Main'];
+  };
 
-	const [selectedCategory, setSelectedCategory] = useState("Main")
+  const loadSelectedCategoryFromLocalStorage = () => {
+    const storedSelectedCategory = localStorage.getItem('selectedCategory');
+    return storedSelectedCategory ? JSON.parse(storedSelectedCategory) : 'Main';
+  };
 
-	const createTask = (task) => {
-		setTasks([...tasks, task])
-	}
+  const [tasks, setTasks] = useState(loadTasksFromLocalStorage());
+  const [categories, setCategories] = useState(loadCategoriesFromLocalStorage());
+  const [selectedCategory, setSelectedCategory] = useState(loadSelectedCategoryFromLocalStorage());
 
-	const deleteTask = (task) => {
-		const filteredTasks = [...tasks].filter((obj) => obj.id !== task.id)
-		setTasks([...filteredTasks])
-	}
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+  }, [tasks]);
 
-	const checkTask = (task) => {
-		const tasksCopy = [...tasks]
-		const desiredObjectIndex = tasksCopy.findIndex((obj) => obj.id === task.id)
-		tasksCopy[desiredObjectIndex].checkedStatus = !tasksCopy[desiredObjectIndex].checkedStatus
-		setTasks(tasksCopy)
-	}
+  useEffect(() => {
+    localStorage.setItem('categories', JSON.stringify(categories));
+  }, [categories]);
 
-	const changeCategory = (category) => {
-		setSelectedCategory(category)
-	}
-
-	const createCategory = (category) => {
-		setCategories([...categories, category])
-	}
-
-	const deleteCategory = (category) => {
-		if (selectedCategory === category) {
-			setSelectedCategory("Main")
-		}
-
-		setTasks(tasks.filter((item) => item.categoryName !== category))
-		setCategories(categories.filter((item) => item !== category))
-	}
-
-	return (
-		<div className="App">
-
-			<Categories
-				tasks={tasks}
-				categories={categories}
-				selectedCategory={selectedCategory}
-				setSelectedCategory={setSelectedCategory}
-				changeCategory={changeCategory}
-				createCategory={createCategory}
-				deleteCategory={deleteCategory}
-			/>
+  useEffect(() => {
+    localStorage.setItem('selectedCategory', JSON.stringify(selectedCategory));
+  }, [selectedCategory]);
 
 
-			<Tasks
-				selectedCategory={selectedCategory}
-				tasks={tasks}
-				setTasks={setTasks}
-				createTask={createTask}
-				checkTask={checkTask}
-				deleteTask={deleteTask}
-			/>
-		</div>
-	);
+  return (
+    <div className="App">
+
+      <Categories
+        tasks={tasks}
+        setTasks={setTasks}
+        categories={categories}
+        setCategories={setCategories}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+
+      />
+
+      <Tasks
+        selectedCategory={selectedCategory}
+        tasks={tasks}
+        setTasks={setTasks}
+      />
+    </div>
+  );
 }
 
 export default App;

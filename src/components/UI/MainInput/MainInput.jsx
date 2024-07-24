@@ -1,13 +1,14 @@
-import React from 'react';
-import cl from "./MainInput.module.css"
+import React, { forwardRef } from 'react';
+import cl from './MainInput.module.css';
 
-const MainInput = (props) => {
-	return (
-		<input
-			className={cl.mainInput}
-			{...props}
-		/>
-	);
-};
+const MainInput = forwardRef((props, ref) => {
+  return (
+    <input
+      className={cl.mainInput}
+      ref={ref}
+      {...props}
+    />
+  );
+});
 
 export default MainInput;

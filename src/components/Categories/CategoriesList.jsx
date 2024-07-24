@@ -1,27 +1,35 @@
 import React from 'react';
-import CategoriesListItem from "./CategoriesListItem";
+import CategoriesListItem from './CategoriesListItem';
 
-const CategoriesList = ({tasks, categories, selectedCategory, changeCategory, deleteCategory}) => {
-	return (
-		<ul className={"categories__list"}>
+const CategoriesList = ({
+                          categories,
+                          selectedCategory,
+                          changeCategory,
+                          deleteCategory,
+                          modalVisibility,
+                          setModalVisibility,
+                        }) => {
+  return (
+    <ul className={'categories__list'}>
 
-			{categories.map((category, index) => {
-				return (
+      {categories.map((category, index) => {
+        return (
+          <CategoriesListItem
+            category={category}
+            selectedCategory={selectedCategory}
+            deleteCategory={deleteCategory}
+            changeCategory={changeCategory}
+            key={index}
+            modalVisibility={modalVisibility}
+            setModalVisibility={setModalVisibility}
+          >
+            {category}
+          </CategoriesListItem>
+        );
+      })}
 
-					<CategoriesListItem
-						category={category}
-						selectedCategory={selectedCategory}
-						deleteCategory={deleteCategory}
-						changeCategory={changeCategory}
-						key={index}
-					>
-						{category}
-					</CategoriesListItem>
-				)
-			})}
-
-		</ul>
-	);
+    </ul>
+  );
 };
 
 export default CategoriesList;
